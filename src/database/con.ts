@@ -1,15 +1,16 @@
 import "reflect-metadata"
 import { Connection, createConnection } from "typeorm"
+import configs from "../configs"
 
 
 export const initDB = async (): Promise<Connection> => {
     const con = await createConnection({
         type: 'postgres',
         // host: "localhost",
-        port: 5432,
-        username: "postgres",
-        password: "1234",
-        database: "postgres",
+        port: configs.environments.DB_PORT,
+        username: configs.environments.DB_USER,
+        password: configs.environments.DB_PASS,
+        database: configs.environments.DB_DATABASE,
     })
     await con.synchronize(true)
     return con
