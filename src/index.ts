@@ -1,5 +1,7 @@
 import Hapi from '@hapi/hapi'
 import { Request, ResponseToolkit } from 'hapi'
+
+import { initDB } from './database';
 import configs from './configs';
 
 const init = async () => {
@@ -15,6 +17,10 @@ const init = async () => {
             return { message: 'Hello world' };
         }
     });
+
+    await initDB().then(() =>
+        console.log('connection database successfully')
+    )
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
