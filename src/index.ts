@@ -18,9 +18,7 @@ const init = async () => {
         }
     });
 
-    await initDB.initialize().then(() =>
-        console.log('connection database successfully')
-    ).catch(error => console.log(error))
+    await initDB.initialize()
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
