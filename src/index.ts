@@ -3,8 +3,11 @@ import { Request, ResponseToolkit } from 'hapi'
 
 import { initDB } from './database';
 import configs from './configs';
+import { userController } from './controllers'
 
 const init = async () => {
+    await initDB.initialize()
+
     const server: Hapi.Server = Hapi.server({
         port: configs.environments.PORT,
         host: 'localhost'
@@ -18,7 +21,7 @@ const init = async () => {
         }
     });
 
-    await initDB.initialize()
+    server.route(userController())
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
