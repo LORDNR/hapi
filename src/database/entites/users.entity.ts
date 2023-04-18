@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { SharedProp } from "./sharedProp.entity"
+import { PostEntity } from "./posts.entity"
 
 enum UserType {
     admin = 'admin',
@@ -8,8 +9,8 @@ enum UserType {
 
 @Entity({ name: 'users' })
 export class UserEntity extends SharedProp {
-    @PrimaryGeneratedColumn()
-    id!: number
+    @PrimaryGeneratedColumn('uuid')
+    id!: string
 
     @Column('varchar', { name: 'first_name', nullable: false })
     firstName!: string
@@ -25,4 +26,10 @@ export class UserEntity extends SharedProp {
 
     @Column('text', { name: 'type', default: UserType.user })
     type!: UserType
+
+    @OneToMany(() => PostEntity, (posts: PostEntity) => posts.user, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    posts!: Array<PostEntity>
 }

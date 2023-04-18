@@ -2,7 +2,9 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 
 import configs from "../configs"
-import { UserEntity } from './entites'
+import { UserEntity, PostEntity } from './entites'
+
+const entities = [UserEntity, PostEntity]
 
 export const initDB = new DataSource({
     type: "postgres",
@@ -13,5 +15,5 @@ export const initDB = new DataSource({
     database: configs.environments.DB_DATABASE,
     synchronize: true,
     logging: false,
-    entities: [UserEntity]
+    entities
 })
