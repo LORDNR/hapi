@@ -13,12 +13,14 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^21.3.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/hapi": "^18.0.8",
     "@types/node": "^18.15.11",
     "@types/pg": "^8.6.6",
