@@ -14,6 +14,8 @@ export const initDB = new DataSource({
     password: configs.environments.DB_PASS,
     database: configs.environments.DB_DATABASE,
     synchronize: true,
-    logging: false,
+    logging: ['error'],
+    logger: 'advanced-console',
     entities
+
 })
