@@ -24,6 +24,9 @@ export class UserEntity extends SharedProp {
     @Column('varchar', { name: 'email', unique: true, nullable: false })
     email!: string
 
+    @Column('text', { name: 'password', nullable: false })
+    password!: string
+
     @Column('text', { name: 'type', default: UserType.user })
     type!: UserType
 

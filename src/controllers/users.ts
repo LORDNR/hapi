@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm'
 import { Request, ResponseToolkit } from 'hapi'
+import bcrypt from 'bcryptjs'
 
 import { UserEntity } from '../database/entites'
 import { initDB } from '../database'
@@ -15,7 +16,11 @@ const userController = () => {
                 const options = { where: { ...request.query } }
 
                 const users = await userRepo.find(options);
-                return h.response({ status: 'success', data: users }).code(200);
+                const sanitizedUsers = users.map((userData: UserEntity) => ({ ...userData, password: undefined }));
+                return h.response({
+                    status: 'success',
+                    data: sanitizedUsers,
+                }).code(200);
             }
         },
         {
@@ -27,15 +32,18 @@ const userController = () => {
                 if (!user) {
                     return h.response({ status: 'error', data: 'This user information does not exist.' }).code(400);
                 }
-                return h.response({ status: 'success', data: user }).code(200);
+                const { password, ...userData } = user;
+                return h.response({ status: 'success', data: userData }).code(200);
             }
         },
         {
             method: 'POST',
             path: '/users',
             handler: async (request: Request, h: ResponseToolkit, err?: Error) => {
-                const { firstName, lastName, email, birthOfDate } = request.payload as Partial<UserEntity>
-                const newUser = userRepo.create({ firstName, lastName, email, birthOfDate })
+                const { firstName, lastName, email, birthOfDate, password } = request.payload as Partial<UserEntity>
+                const hashPassword = bcrypt.hashSync(String(password), await bcrypt.genSalt(10))
+
+                const newUser = userRepo.create({ firstName, lastName, email, birthOfDate, password: hashPassword })
                 const savedUser = await userRepo.save(newUser)
                 return h.response({ status: 'success', data: savedUser }).code(201)
             }
@@ -58,7 +66,8 @@ const userController = () => {
                 userToUpdate.email = email ?? userToUpdate.email;
 
                 const updatedUser = await userRepo.save(userToUpdate);
-                return h.response({ status: 'success', data: updatedUser }).code(200);
+                const { password, ...userData } = updatedUser;
+                return h.response({ status: 'success', data: userData }).code(200);
             }
         },
         {
