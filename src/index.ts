@@ -3,7 +3,7 @@ import { Request, ResponseToolkit } from 'hapi'
 
 import { initDB } from './database';
 import configs from './configs';
-import { userController } from './controllers'
+import { authController, userController } from './controllers'
 
 const init = async () => {
     await initDB.initialize()
@@ -22,6 +22,7 @@ const init = async () => {
     });
 
     server.route(userController())
+    server.route(authController())
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
