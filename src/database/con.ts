@@ -13,9 +13,8 @@ export const initDB = new DataSource({
     username: configs.environments.DB_USER,
     password: configs.environments.DB_PASS,
     database: configs.environments.DB_DATABASE,
-    synchronize: true,
+    synchronize: false,
     logging: ['error'],
     logger: 'advanced-console',
     entities
-
 })
